@@ -1,0 +1,11 @@
+name: AdventureMapManager
+version: ${project.version}
+main: eu.thevelda.adventuremapmanager.main
+api-version: 1.16
+load: STARTUP
+authors: [ Velda ]
+description: Plugin pro správný běh adventure map na našem serveru.
+softdepend: [PlaceholderAPI]
+commands:
+  map:
+    description: Příkaz pomocí kterého lze zjistit informace o momentální mapě.

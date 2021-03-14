@@ -1,0 +1,26 @@
+# Název jar souboru, při spouštění. Používá se pro nahrazení při automatickém stažení paperu podle verez mapy. Musí být definován pokud je force-map-version nastaveno na true.
+server-file-name: server.jar
+# Když je nastaveno na true automaticky se pokusí stáhnout server (paper) podle verze mapy
+force-map-version: true
+# Tohle je příklad, jak může být mapa nastavena
+map:
+  # Název mapy, musí být nastaven, mohou být použity barvy
+  name: "&b&lLast Breath"
+  # Verze mapy, musí být nastavena
+  mc-version: 1.16.3
+  # Název světa mapy, používá se pro umístění nově stažené mapy
+  world-name: world
+  # Odkaz pro stažení zipu mapy
+  world-url: https://upload.hicoria.com/files/qxEd13NF.zip
+  # Odkaz na zip resourcepacku, pokud nechcete použít resourcepack nechte pouze prázdné uvozovky
+  resource-pack-url: "https://upload.hicoria.com/files/rbAhKexY.zip"
+  # SHA1 resourcepacku
+  resource-pack-sha1: 0d8d6412fea46dec361c94b2924a6122ce699958
+  # Pokud je nastaveno na true hráči, kteří zakážou stáhnutí resourcepacku budou vyhozeni.
+  deny-join-without-resource-pack: true
+  # Odkaz na web mapy, musí být nastaven
+  website: http://example.com
+  # Autor mapy, musí být nastaven
+  author: Command Builders
+  # limit hráčů mapy, musí být nastaven
+  limit: 4
