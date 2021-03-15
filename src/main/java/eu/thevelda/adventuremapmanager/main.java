@@ -229,6 +229,10 @@ public final class Main extends JavaPlugin {
 
         // Register commands
         getCommand("map").setExecutor(new MapCommand());
+
+        // BStats Metrics
+        int pluginId = 10672;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     public String messageReplacement(String stringToReplace) {
