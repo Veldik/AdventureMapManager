@@ -1,54 +1,57 @@
 # AdventureMapManager
-Plugin pro správu adventure map na Minecraft serveru.
-Nastavení mapy probíhá v config.yml
+Plugin for manage Minecraft adventure maps on Minecraft server.  
+Main function is when everybody leave server, map will be restarted (re-downloaded) to factory phase.  
+You can configure your map in [config.yml](https://github.com/Veldik/AdventureMapManager/blob/main/src/main/resources/config.yml)
+
+[Czech version of README](README_CZ.md)
 
 ## Features:
-- Vypnutí serveru, když jej všichni opustí
-- Znovu stáhnutí mapy z odkazu nastaveném v configu na server po znovu spuštění
-- Oznámení o momentální mapě při připojení
-- Nastaví limit hráčů podle limitu nastaveném v configu
-- Nastavení automatického stažení paper serveru podle verze, na kterou je vytvořena mapa
-- Stažení resourcepacku, možnost zakázat v configu připojení bez resourcepacku
+- Shutdown server (it's recommended to set-up auto start, if shutdown), when everybody leave
+- Re-download map from link, what is configured in config, on every start.
+- Announce about playing map on join
+- Set player-limit by value, what is in config. 
+- You can allow automatically download [PaperMC](https://papermc.io/) by map version what is configured in config
+- You can set to force download (When player don't allow it, he can't join to server) map resource pack
 
 ## Commands:
-- `map` Vypíše základní informace o aktuální mapě
+- `/map` Shows basic info about map, what are you playing
 
 ## Placeholders:
-- `%AdventureMapManager_map_name%` Vrátí název aktuální mapy
-- `%AdventureMapManager_map_mc_version%` Vrátí verzi Minecraftu, pro kterou je mapa vytvořena
-- `%AdventureMapManager_map_world_name%` Vrátí název světa, ve kterém je mapa nahrána
-- `%AdventureMapManager_map_world_url%` Vrátí odkaz pro stažení světa mapy
-- `%AdventureMapManager_map_resource_pack_url%` Vrátí odkaz pro resource packu mapy
-- `%AdventureMapManager_map_website%` Vrátí odkaz na web mapy
-- `%AdventureMapManager_map_author%` Vrátí autora mapy
-- `%AdventureMapManager_map_limit%` Vrátí maximum hráčů pro mapu
+- `%AdventureMapManager_map_name%` Returns map name
+- `%AdventureMapManager_map_mc_version%` Returns Minecraft version of map
+- `%AdventureMapManager_map_world_name%` Returns world name, where is map played
+- `%AdventureMapManager_map_world_url%` Returns link for download map world
+- `%AdventureMapManager_map_resource_pack_url%` Returns link for download map resource pack
+- `%AdventureMapManager_map_website%` Returns link for map website
+- `%AdventureMapManager_map_author%` Returns map author name
+- `%AdventureMapManager_map_limit%` Returns maximum of players for map
 
 ## config.yml
 ```yaml
-# Název jar souboru, při spouštění. Používá se pro nahrazení při automatickém stažení paperu podle verez mapy. Musí být definován pokud je force-map-version nastaveno na true.
+# Server jar name, it is used for replacing by correct version of PaperMC, when is force-map-version set to true
 server-file-name: server.jar
-# Když je nastaveno na true automaticky se pokusí stáhnout server podle verze mapy
-force-map-version: true
-# Tohle je příklad, jak může být mapa nastavena
+# When is set to true, is tries to download correct Minecraft version by map version
+force-map-version: false
+# This is example, how can be map configured
 map:
-  # Název mapy, musí být nastaven, mohou být použity barvy
+  # Map name, must be configured, you can use colors (example: &a&lOMG &c&nMaRiO &eSUPERMAP)
   name: "&b&lLast Breath"
-  # Verze mapy, musí být nastavena
+  # Map Minecraft version, must be configured
   mc-version: 1.16.3
-  # Název světa mapy, používá se pro umístění nově stažené mapy
+  # Minecraft world name, when will be map placed
   world-name: world
-  # Odkaz pro stažení zipu mapy
+  # Link for download map zip
   world-url: https://upload.hicoria.com/files/qxEd13NF.zip
-  # Odkaz na zip resourcepacku, pokud nechcete použít resourcepack nechte pouze prázdné uvozovky
+  # Link of zip resourcepack, when you don't want to use resourcepack set quotation marks only (Default Minecraft launcher java don't support Let's encrypt certificates)
   resource-pack-url: "https://upload.hicoria.com/files/rbAhKexY.zip"
-  # SHA1 resourcepacku
-  resource-pack-sha1: 0d8d6412fea46dec361c94b2924a6122ce699958
-  # Pokud je nastaveno na true hráči, kteří zakážou stáhnutí resourcepacku budou vyhozeni.
+  # SHA1 of resource pack
+  resource-pack-sha1: 3980d40646934e544163a359fa0387eaa4cbe017
+  # When is set to true, players what don't allow to download resource pack, will be kicked
   deny-join-without-resource-pack: true
-  # Odkaz na web mapy, musí být nastaven
-  website: http://example.com
-  # Autor mapy, musí být nastaven
+  # Link for map website, must be configured
+  website: https://bit.ly/35gWAkX
+  # Map author, must be configured
   author: Command Builders
-  # limit hráčů mapy, musí být nastaven
+  # Player-limit of map, must be configured
   limit: 4
 ```

@@ -4,13 +4,13 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class placeholders extends PlaceholderExpansion {
+public class Placeholders extends PlaceholderExpansion {
 
-    private main plugin;
+    private Main plugin;
 
     @Override
     public boolean canRegister() {
-        return (plugin = (main) Bukkit.getPluginManager().getPlugin(getRequiredPlugin())) != null;
+        return (plugin = (Main) Bukkit.getPluginManager().getPlugin(getRequiredPlugin())) != null;
     }
 
     @Override

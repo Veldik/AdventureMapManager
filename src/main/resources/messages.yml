@@ -1,0 +1,26 @@
+# In this config you can use these variables:
+# ${map_name} = Map name
+# ${map_mc_version} = Minecraft version of map
+# ${map_world_name} = World name, where is map played
+# ${map_world_url} = Link for download map world
+# ${map_resource_pack_url} = Link for download map resource pack
+# ${map_website} = Link for map website
+# ${map_author} = Map author name
+# ${map_limit} = Maximum of players for map
+
+# Message when player join, what everybody see
+# Additional variables:
+# ${player_name} = Player name
+# ${online_players} = Value of online players
+global-join-message: "&a${player_name} joined the adventure map!&r &7(${online_players}/${map_limit})"
+# Message when player leave, what everybody see
+# Additional variables:
+# ${player_name} = Player name
+# ${online_players} = Value of online players
+global-leave-message: "&c${player_name} left the adventure map!&r &7(${online_players}/${map_limit})"
+# Message, what player see after he joined a server
+welcome-message: "&eWelcome on adventure map called: ${map_name}\n&r&eMap was created for MC version: ${map_mc_version}\n&r&eMap author:${map_author}\n&r&eLink: ${map_website}"
+# Message, what player see after they send command /map
+map-command-message: "&eMap name: ${map_name}\n&r&eMap MC version: ${map_mc_version}\n&r&eMap author: ${map_author}\n&r&eMap link: ${map_website}\n&r&ePlayer limit: ${map_limit}"
+# Kick message, what player see, when he don't accept resource pack
+kick-without-resourcepack: "&cYou need to accept download of resource pack. When you don't accept resource pack, you can't play map."

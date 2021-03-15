@@ -1,26 +1,26 @@
-# Název jar souboru, při spouštění. Používá se pro nahrazení při automatickém stažení paperu podle verez mapy. Musí být definován pokud je force-map-version nastaveno na true.
+# Server jar name, it is used for replacing by correct version of PaperMC, when is force-map-version set to true
 server-file-name: server.jar
-# Když je nastaveno na true automaticky se pokusí stáhnout server (paper) podle verze mapy
-force-map-version: true
-# Tohle je příklad, jak může být mapa nastavena
+# When is set to true, is tries to download correct Minecraft version by map version
+force-map-version: false
+# This is example, how can be map configured
 map:
-  # Název mapy, musí být nastaven, mohou být použity barvy
+  # Map name, must be configured, you can use colors (example: &a&lOMG &c&nMaRiO &eSUPERMAP)
   name: "&b&lLast Breath"
-  # Verze mapy, musí být nastavena
+  # Map Minecraft version, must be configured
   mc-version: 1.16.3
-  # Název světa mapy, používá se pro umístění nově stažené mapy
+  # Minecraft world name, when will be map placed
   world-name: world
-  # Odkaz pro stažení zipu mapy
+  # Link for download map zip
   world-url: https://upload.hicoria.com/files/qxEd13NF.zip
-  # Odkaz na zip resourcepacku, pokud nechcete použít resourcepack nechte pouze prázdné uvozovky
+  # Link of zip resourcepack, when you don't want to use resourcepack set quotation marks only (Default Minecraft launcher java don't support Let's encrypt certificates)
   resource-pack-url: "https://upload.hicoria.com/files/rbAhKexY.zip"
-  # SHA1 resourcepacku
-  resource-pack-sha1: 0d8d6412fea46dec361c94b2924a6122ce699958
-  # Pokud je nastaveno na true hráči, kteří zakážou stáhnutí resourcepacku budou vyhozeni.
+  # SHA1 of resource pack
+  resource-pack-sha1: 3980d40646934e544163a359fa0387eaa4cbe017
+  # When is set to true, players what don't allow to download resource pack, will be kicked
   deny-join-without-resource-pack: true
-  # Odkaz na web mapy, musí být nastaven
-  website: http://example.com
-  # Autor mapy, musí být nastaven
+  # Link for map website, must be configured
+  website: https://bit.ly/35gWAkX
+  # Map author, must be configured
   author: Command Builders
-  # limit hráčů mapy, musí být nastaven
+  # Player-limit of map, must be configured
   limit: 4

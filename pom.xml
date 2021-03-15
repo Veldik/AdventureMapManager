@@ -6,7 +6,7 @@
 
     <groupId>eu.thevelda.adventuremapmanager</groupId>
     <artifactId>AdventureMapManager</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>AdventureMapManager</name>
@@ -69,6 +69,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>

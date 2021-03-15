@@ -1,12 +1,16 @@
 package eu.thevelda.adventuremapmanager;
 
-import eu.thevelda.adventuremapmanager.commands.map;
+import eu.thevelda.adventuremapmanager.commands.MapCommand;
 import eu.thevelda.adventuremapmanager.events.PlayerJoin;
 import eu.thevelda.adventuremapmanager.events.PlayerLeave;
 import eu.thevelda.adventuremapmanager.events.PlayerResourcepackStatus;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.text.StringSubstitutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONException;
@@ -20,13 +24,18 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public final class main extends JavaPlugin {
-    private static main instance;
+public final class Main extends JavaPlugin {
+    private static Main instance;
+
+    private File messagesConfigFile;
+    private FileConfiguration messagesConfig;
 
     private boolean delete(File file) {
         if (file.isDirectory())
@@ -123,14 +132,14 @@ public final class main extends JavaPlugin {
                 return;
             }
 
-            getLogger().info("Ukládám maximální hráče do server.properties...");
+            getLogger().info("I am saving max player limit into server.properties...");
             properties.setProperty("max-players", maxPlayers);
 
             try (OutputStream os = new FileOutputStream(propertiesFile)) {
                 properties.store(os, "Minecraft server properties");
             }
         } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "Vyskytla se chyba při ukládání maximum hráčů do server.properties", e);
+            getLogger().log(Level.SEVERE, "There was an issue with saving max player limit into server.properties", e);
         }
     }
 
@@ -152,23 +161,23 @@ public final class main extends JavaPlugin {
         // Instance
         instance = this;
 
-        // Nahození správného paper serveru podle verze
+        // Downloading correct version of PaperMC for map
         String fullPlatformVersion = getServer().getVersion();
         int start = fullPlatformVersion.indexOf("(MC:");
         String mcversion = fullPlatformVersion.substring(start + 5, fullPlatformVersion.length() - 1);
 
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aPlugin is enabled. Verze Minecraft serveru: " + mcversion));
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aPlugin is enabled. Minecraft server version is: " + mcversion));
 
         if (mcversion.equals(getConfig().getString("map.mc-version"))) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aVerze serveru se shoduje s požadovanou verzí mapy. Vše je v pořádku!"));
+            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aMinecraft server version is same as Minecraft map version. Everything is ok!"));
         } else {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &cVerze serveru se neshoduje s požadovanou verzí mapy."));
+            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &cMinecraft server version is not same as Minecraft map version."));
             if (getConfig().getBoolean("force-map-version")) {
                 try {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aPřehraji verzi serveru na požadovanou: " + getConfig().getString("map.mc-version")));
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aI will replace your server to PaperMC Minecraft version: " + getConfig().getString("map.mc-version")));
                     JSONObject latestJson = readJsonFromUrl("https://papermc.io/api/v1/paper/" + getConfig().getString("map.mc-version"));
                     Integer latestBuild = latestJson.getJSONObject("builds").getInt("latest");
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aPodařilo se najít build: " + latestBuild + " na verzi: " + getConfig().getString("map.mc-version")));
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &aPaperMC build number: " + latestBuild + " on Minecraft version: " + getConfig().getString("map.mc-version") + " was found. After downloading server will be stopped. (it's recommended to set-up auto start, if shutdown)"));
                     String latestPaperUrl = "https://papermc.io/api/v1/paper/" + getConfig().getString("map.mc-version") + "/" + latestBuild + "/download";
                     downloadFile(latestPaperUrl, getConfig().getString("server-file-name"));
                     getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
@@ -178,16 +187,19 @@ public final class main extends JavaPlugin {
                     });
                 } catch (Exception e) {
                     System.out.println(e);
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &cNepodařilo se najít Paper na verzi: " + getConfig().getString("map.mc-version")));
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &cThere was problem with searching PaperMC on Minecraft version: " + getConfig().getString("map.mc-version")));
                 }
             } else {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &cAutomatické nahození verze na server je zakázáno."));
+                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&5&lAdventureMapManager&r &8&l>&r &cForce set Minecraft PaperMC same as map Minecraft version is disabled."));
             }
         }
 
         // Register config
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
+        createMessagesConfig();
+        // Loading messages
+
 
         // Register events
         PluginManager pm = Bukkit.getPluginManager();
@@ -197,7 +209,7 @@ public final class main extends JavaPlugin {
 
         // Register placeholders
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new placeholders().register();
+            new Placeholders().register();
         }
 
         // Delete old map and download new
@@ -212,11 +224,44 @@ public final class main extends JavaPlugin {
         try {
             changeSlots(getConfig().getInt("map.limit"));
         } catch (ReflectiveOperationException e) {
-            getLogger().log(Level.SEVERE, "Vyskytla se chyba při nastavování limitu hráčů", e);
+            getLogger().log(Level.SEVERE, "There was issue with setting-up player max limit.", e);
         }
 
         // Register commands
-        getCommand("map").setExecutor(new map());
+        getCommand("map").setExecutor(new MapCommand());
+    }
+
+    public String messageReplacement(String stringToReplace) {
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("map_name", this.getConfig().getString("map.name"));
+        replacements.put("map_mc_version", this.getConfig().getString("map.mc-version"));
+        replacements.put("map_world_name", this.getConfig().getString("map.world-name"));
+        replacements.put("map_world_url", this.getConfig().getString("map.world-url"));
+        replacements.put("map_resource_pack_url", this.getConfig().getString("map.resource-pack-url"));
+        replacements.put("map_website", this.getConfig().getString("map.website"));
+        replacements.put("map_author", this.getConfig().getString("map.author"));
+        replacements.put("map_limit", this.getConfig().getString("map.limit"));
+        StringSubstitutor sub = new StringSubstitutor(replacements);
+        return sub.replace(stringToReplace);
+    }
+
+    public FileConfiguration getMessagesConfig() {
+        return this.messagesConfig;
+    }
+
+    private void createMessagesConfig() {
+        messagesConfigFile = new File(getDataFolder(), "messages.yml");
+        if (!messagesConfigFile.exists()) {
+            messagesConfigFile.getParentFile().mkdirs();
+            saveResource("messages.yml", false);
+        }
+
+        messagesConfig = new YamlConfiguration();
+        try {
+            messagesConfig.load(messagesConfigFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -226,7 +271,7 @@ public final class main extends JavaPlugin {
         instance = null;
     }
 
-    public static main getInstance() {
+    public static Main getInstance() {
         return instance;
     }
 }
