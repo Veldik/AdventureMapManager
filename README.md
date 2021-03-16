@@ -1,4 +1,7 @@
 # AdventureMapManager
+[![Current Release](https://img.shields.io/github/release/Veldik/AdventureMapManager.svg)](https://github.com/Veldik/AdventureMapManager/releases/latest)
+[![SpigotMC Downloads](https://img.shields.io/spiget/downloads/90119.svg?label=Downloads&color=fcba03)](https://www.spigotmc.org/resources/adventuremapmanager.90119/)
+[![SpigotMC Rating](https://img.shields.io/spiget/stars/90119.svg?label=Rating)](https://www.spigotmc.org/resources/adventuremapmanager.90119/)  
 Plugin for manage Minecraft adventure maps on Minecraft server.  
 Main function is when everybody leave server, map will be restarted (re-downloaded) to factory phase.  
 You can configure your map in [config.yml](https://github.com/Veldik/AdventureMapManager/blob/main/src/main/resources/config.yml)
